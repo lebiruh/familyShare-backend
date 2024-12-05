@@ -21,6 +21,7 @@ import removeLikeRoute from './routes/removeLike.route.js';
 import createFamilyRoute from './routes/createFamily.route.js';
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
 import multer, { memoryStorage } from "multer";
+import sharp from 'sharp';
 
 
 const port = process.env.PORT;
@@ -62,13 +63,16 @@ app.post('/api/upload', upload.single('image'), async (req, res) => {
 
   const { file } = req;
 
+  const optimizedImage = await sharp(file.buffer).jpeg({quality:80}).toBuffer();
+
   const key = `uploads/${Date.now().toString()}-${file.originalname}`
 
   try {
     const params = {
       Bucket: process.env.AWS_S3_BUCKET,
       Key: key,
-      Body: file.buffer,
+      // Body: file.buffer,
+      Body: optimizedImage
     }
 
     const command = new PutObjectCommand(params)
