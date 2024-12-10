@@ -22,9 +22,13 @@ import createFamilyRoute from './routes/createFamily.route.js';
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
 import multer, { memoryStorage } from "multer";
 import sharp from 'sharp';
+import https from 'https';
+import fs from 'fs';
 
 
-const port = process.env.PORT;
+// const port = process.env.PORT;
+
+const httpsPort = process.env.HTTPS_PORT;
 
 const app = express();
 
@@ -33,6 +37,7 @@ app.use(cors({credentials: true}));
 app.use(sanitize.middleware);
 
 app.use(express.json());
+
 
 const s3Client = new S3Client({
   credentials: {
@@ -107,6 +112,14 @@ app.use('/api/search', searchUserRoute);
 
 
 
-app.listen(port, () => {
-  console.log(`listening on port ${port}`)
+// app.listen(port, () => {
+//   console.log(`listening on port ${port}`)
+// });
+
+const options = {
+  
+}
+
+https.createServer(options, app).listen(httpsPort, () => {
+  console.log(`Server is running on port ${httpsPort}`);
 });

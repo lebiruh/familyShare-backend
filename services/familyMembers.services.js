@@ -38,7 +38,7 @@ export const addDbFamilyMember = async (familyId, userId) => {
 
     const values = [familyId, userId]
 
-    const addFamilyMember = "INSERT INTO familyMember (`familyId`, `userId`) VALUES (?)";
+    const addFamilyMember = "INSERT INTO familymember (`familyId`, `userId`) VALUES (?)";
 
     const member = await conn.query(addFamilyMember, [values]);
 
